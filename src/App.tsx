@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 
 
@@ -34,8 +34,16 @@ function NasaInfo() {
     );
 }
 
+
 function CountClicks() {
-    const [clickCount, setClickCount] = useState(0);
+    const [clickCount, setClickCount] = useState(() => {
+        const storedClicks = localStorage.getItem('clickCount');
+        return storedClicks !== null ? parseInt(storedClicks) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('clickCount', clickCount.toString());
+    }, [clickCount]);
 
     function countClick() {
         setClickCount(clickCount + 1);
