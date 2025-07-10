@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useEffect, useState, createContext, useContext} from 'react'
 import './App.css'
 
 
@@ -106,14 +106,88 @@ function Component1() {
 }
 
 
+const MyContext = createContext({
+    clickCount: 0,
+    increment: () => {}
+});
+
+
+function ClickCountWithContext({ children }: { children: React.ReactNode }) {
+    const [clickCount, setClickCount] = useState(() => {
+        const stored = localStorage.getItem("clickCount");
+        return stored !== null ? parseInt(stored) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem("clickCount", clickCount.toString());
+    }, [clickCount]);
+
+    function increment() {
+        setClickCount(prev => prev + 1);
+    }
+
+    return (
+        <MyContext.Provider value={{ clickCount, increment }}>
+            {children}
+        </MyContext.Provider>
+    );
+}
+
+function Component4WithContext() {
+    const { clickCount } = useContext(MyContext);
+
+    return (
+        <div>
+            <p>Click count: {clickCount}</p>
+        </div>
+    );
+}
+
+function Component3WithContext() {
+    return (
+        <div>
+            <Component4WithContext />
+            <p>Message</p>
+        </div>
+    );
+}
+
+
+function Component2WithContext() {
+    const { increment } = useContext(MyContext);
+
+    return (
+        <button onClick={increment}>
+            Click to increase counter
+        </button>
+    );
+}
+
+function Component1WithContext() {
+    return (
+        <div className="component-tree">
+            <Component2WithContext />
+            <Component3WithContext />
+        </div>
+    );
+}
+
+
+
 function App() {
     return (
-        <>
-            <NasaInfo/>
-            {/* <CountClicks/> */}
-            <Component1/>
-        </>
+        <ClickCountWithContext>
+            <NasaInfo />
+            <Component1WithContext />
+        </ClickCountWithContext>
     );
 }
 
 export default App
+
+
+//<>
+//    <NasaInfo/>
+//    {/* <CountClicks/>*/}
+//    <Component1/>
+//</>
