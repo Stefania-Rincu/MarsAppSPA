@@ -40,3 +40,23 @@
 .read-the-docs {
   color: #888;
 }
+
+.nasa-card {
+  padding: 1.5em;
+}
+
+.nasa-title {
+  text-align: center;
+  font-size: 42px;
+}
+
+.nasa-info {
+  font-size: 18px;
+  line-height: 1.5em;
+  text-align: justify;
+}
+
+.nasa-logo {
+  height: 10em;
+  padding: 1.5em;
+}
