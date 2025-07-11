@@ -1,0 +1,56 @@
+function Component4({ clickCount }: { clickCount: number }) {
+    return (
+        <div>
+            <p>Click count: {clickCount}</p>
+        </div>
+    );
+}
+
+function Component3({ clickCount }: { clickCount: number }) {
+    return (
+        <div>
+            <Component4 clickCount={clickCount} />
+            <p>Message</p>
+        </div>
+    );
+}
+
+function Component2({ incrementCount }: { incrementCount: () => void })
+{
+    return (
+        <button onClick={incrementCount}>
+            Click to increase counter
+        </button>
+    );
+}
+
+function Component1() {
+    const [clickCount, setClickCount] = useState(() => {
+        const storedClicks = localStorage.getItem('clickCount');
+        return storedClicks !== null ? parseInt(storedClicks) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('clickCount', clickCount.toString());
+    }, [clickCount]);
+
+    function incrementCount() {
+        setClickCount(clickCount + 1);
+    }
+
+    return (
+        <div className="component-tree">
+            <Component2 incrementCount={incrementCount} />
+            <Component3 clickCount={clickCount} />
+        </div>
+    )
+}
+
+function App() {
+    return (
+        <>
+            <NasaInfo />
+            <Component1 />
+        </>
+    );
+}
