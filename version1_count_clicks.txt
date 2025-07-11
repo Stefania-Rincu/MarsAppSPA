@@ -1,0 +1,20 @@
+function CountClicks() {
+    const [clickCount, setClickCount] = useState(() => {
+        const storedClicks = localStorage.getItem('clickCount');
+        return storedClicks !== null ? parseInt(storedClicks) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('clickCount', clickCount.toString());
+    }, [clickCount]);
+
+    function countClick() {
+        setClickCount(clickCount + 1);
+    }
+
+    return (
+        <button onClick={countClick}>
+            Click count: {clickCount}
+        </button>
+    );
+}
